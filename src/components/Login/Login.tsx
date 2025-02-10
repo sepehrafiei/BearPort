@@ -39,12 +39,17 @@ export default function Login() {
               border: 'none',
               color: 'white',
             },
+            
             input: {
               //borderColor: '#ccc',
             },
+            
           },
-        }}
+        }
+        
+      }
         redirectTo={`${window.location.origin}/dashboard`} 
+       
         />
           </div>
         )

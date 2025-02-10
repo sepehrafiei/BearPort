@@ -1,13 +1,19 @@
-import React from 'react'
-import { Link } from 'react-router'
-import styles from './Home.module.css'
+import React from "react"
+import styles from "./Home.module.css"
+import Login from "../../components/Login/Login"
+import Logo from "../../assets/Logo.png"
+import Spacer from "../../components/Spacer/Spacer"
 
-function Home() {
+export default function Home() {
   return (
-    <div className={styles.container} >
-        <Link to="/login">Login</Link>
+    <div className={styles.container}>
+      <Spacer/>
+      <img className={styles.logo} src={Logo} alt="" />
+      <Spacer/>
+      <Login/>
+      <Spacer/>
+      
     </div>
+    
   )
 }
-
-export default Home

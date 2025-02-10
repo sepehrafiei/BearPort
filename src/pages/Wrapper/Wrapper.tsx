@@ -23,7 +23,7 @@ function Wrapper({children}:{children:ReactNode}) {
         if (authenticated) {
             return <>{children}</>
         }
-        return <Navigate to="/login"/>
+        return <Navigate to="/"/>
     }
 }
 
