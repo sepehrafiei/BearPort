@@ -6,6 +6,7 @@ import { ThemeSupa} from '@supabase/auth-ui-shared'
 import { Session } from "@supabase/supabase-js";
 import styles from "./Login.module.css"
 
+
 export default function Login() {
     const navigate = useNavigate()
     const [session, setSession] = useState<Session | null>(null)
@@ -26,30 +27,21 @@ export default function Login() {
       if (!session) {
         return (
           <div className={styles.container}>
+            <h1>FIND FELLOW BEARS TO GO TO THE AIRPORT WITH!</h1>
+            <p>Sign in with your Student Gmail: </p>
             <Auth 
         supabaseClient={supabase} 
         providers={['google']} 
         appearance={{
           theme: ThemeSupa,
-          style: {
-            container: {
-            },
-            button: {
-              backgroundColor: '#0A66C2',
-              border: 'none',
-              color: 'white',
-            },
-            
-            input: {
-              //borderColor: '#ccc',
-            },
-            
+          className: {
+            button: styles.authButton,
           },
         }
         
       }
         redirectTo={`${window.location.origin}/dashboard`} 
-       
+        onlyThirdPartyProviders
         />
           </div>
         )
