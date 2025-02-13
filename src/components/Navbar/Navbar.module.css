@@ -1,0 +1,54 @@
+.navbar {
+    display: flex;
+    flex-direction:row;
+    width: 100vw;
+ 
+    justify-content: flex-end;
+}
+
+button {
+    background-color: transparent;
+    color: black;
+    width: 5vw;
+    height: 2.5vw;
+    margin-right: 2.5vw;
+    margin-top:0.5vw;
+    margin-bottom: 0.5vw;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.8vw;
+    font-weight: 400;
+    font-family: "Inter", serif;
+    font-weight: 500;
+}
+
+.active {
+    background: rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+
+.divider {
+    display: flex;
+    width: 100vw;
+    height:0.2vh;
+    background: rgba(0,0,0,0.1)
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+@media (max-width: 768px) {
+    button {
+        height:10vw;
+        width: 16vw;
+        font-size: 3vw;
+    }
+    .navbar {
+        justify-content: center;
+        margin-bottom: 2vw;
+    }
+}
