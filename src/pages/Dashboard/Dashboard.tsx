@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from 'react'
-import supabase from '../../helper/supabaseClient'
-import { useNavigate } from 'react-router'
-import { Session } from '@supabase/supabase-js'
+import { useState, useEffect } from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+import supabase from '../../helper/supabaseClient';
+import { Session } from '@supabase/supabase-js';
+import Navbar from '../../components/Navbar/Navbar';
+import styles from "./Dashboard.module.css";
 
 function Dashboard() {
     const [session, setSession] = useState<Session | null>(null)
@@ -17,18 +19,16 @@ function Dashboard() {
           })
     }, [])
 
-    const navigate = useNavigate()
-    const signOut = async () => {
-        const {error} = await supabase.auth.signOut()
-        if (error) throw error
-        navigate("/")
-    }
-  return (
-    <div>
-        <h1>Welcome {userName}!</h1>
-        <button onClick={signOut}>Sign out</button>
-    </div>
-  )
-}
+
+
+    return (
+              <div className={styles.container}>
+                  <Navbar />
+                  <main className={styles.content}>
+                      <Outlet />
+                  </main>
+              </div>
+          );
+      }
 
 export default Dashboard
