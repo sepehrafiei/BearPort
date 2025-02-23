@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import supabase from '../../helper/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 import Navbar from '../../components/Navbar/Navbar';
 import styles from "./Dashboard.module.css";
+
 
 function Dashboard() {
     const [session, setSession] = useState<Session | null>(null)

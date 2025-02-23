@@ -13,6 +13,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/dashboard/*" element={
           <Wrapper>
             <Dashboard />
