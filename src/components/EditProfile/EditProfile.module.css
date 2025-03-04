@@ -1,0 +1,17 @@
+.container {
+    width: 30vw;
+    height: 20vw;
+    border: none !important;
+
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputContainer > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
