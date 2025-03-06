@@ -41,7 +41,7 @@ const Profile = () => {
       ) : (
         <p>Profile not found.</p>
       )}
-      <dialog ref={dialogRef}><EditProfile profile={profile}/></dialog>
+      <dialog ref={dialogRef}><EditProfile profile={profile} toggleDialog={toggleDialog}/></dialog>
     </div>
   );
 };

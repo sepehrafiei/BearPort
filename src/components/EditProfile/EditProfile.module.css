@@ -1,6 +1,9 @@
+* {
+    font-family: 'Inter';
+}
 .container {
     width: 30vw;
-    height: 20vw;
+    height: 40vw;
     border: none !important;
 
 }
@@ -14,4 +17,52 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.head {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    margin:0;
+    padding:0;
+    font-size: 0.7vw;
+    font-weight:100;
+    justify-content: space-between;
+}
+
+.exit img {
+    width: 1vw;
+    height: 1vw;
+    margin:0;
+    padding:0;
+}
+
+.exit {
+    width: 1vw;
+    height: 1vw;
+    margin:0;
+    padding:0;
+}
+
+p {
+    font-size: 1.1vw;
+    font-weight: 150;
+}
+
+.inputContainer  p {
+    font-size: 1.2;
+    font-weight: normal;
+}
+
+.row {
+    display: flex;
+    justify-content: right;
+}
+
+input {
+    width: 75%;
+    height: 4vh;
+    border-radius: 0.3vw;
+    border: 1px black;
 }
