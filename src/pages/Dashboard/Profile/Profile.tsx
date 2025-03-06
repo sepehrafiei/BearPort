@@ -22,6 +22,7 @@ const Profile = () => {
     : dialogRef.current.showModal();
   }
 
+
   if (status === 'pending') return <p>Loading...</p>;
   if (status === 'error')
     return <p>Error: {error instanceof Error ? error.message : 'An error occurred'}</p>;
@@ -30,9 +31,9 @@ const Profile = () => {
     <div>
       {profile ? (
         <div className={styles.container}>
-          <img className={styles.pfp} src={profile.profile_pic}/>
+          <img className={styles.pfp} src={profile.photo}/>
           <p className={styles.name}>{profile.full_name}</p>
-          <p>Email: {profile.email}</p>
+          <p>{profile.email}</p>
           {profile.bio? (<p>Bio: {profile.bio}</p>) : null}
           <button onClick={()=> {
             toggleDialog();

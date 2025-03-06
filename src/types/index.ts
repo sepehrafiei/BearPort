@@ -10,7 +10,7 @@ export interface ProfileType {
   bio: string;
   email?: string;
   created_at?: string;
-  profile_pic: string ;
+  photo: string ;
   rating?: number | null;
-  social_media?: SocialMedia | null;
+  instagram?: string | null;
 }
