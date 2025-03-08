@@ -4,6 +4,7 @@ import styles from './Profile.module.css'
 import { useRef } from 'react';
 import EditProfile from '../../../components/EditProfile/EditProfile'
 import {ProfileType} from '../../../types/index'
+import InstagramIcon from '../../../assets/instagram.png'
 
 const Profile = () => {
   const { status, error, data: profile } = useQuery<ProfileType>({
@@ -33,11 +34,17 @@ const Profile = () => {
         <div className={styles.container}>
           <img className={styles.pfp} src={profile.photo}/>
           <p className={styles.name}>{profile.full_name}</p>
-          <p>{profile.email}</p>
-          {profile.bio? (<p>Bio: {profile.bio}</p>) : null}
+          <p className={styles.email}>{profile.email}</p>
+          {profile.bio? (<p>{profile.bio}</p>) : null}
+          {profile.instagram && (
+            <a  href={profile.instagram} target="_blank">
+              <img className={styles.instagram} src={InstagramIcon}/>
+              </a>
+              )}
           <button onClick={()=> {
             toggleDialog();
           }}>Edit</button>
+          
         </div>
       ) : (
         <p>Profile not found.</p>

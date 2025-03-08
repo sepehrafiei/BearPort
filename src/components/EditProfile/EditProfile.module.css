@@ -3,7 +3,7 @@
 }
 .container {
     width: 30vw;
-    height: 33vw;
+    height: 60vh;
     border: none !important;
 
 }
@@ -11,6 +11,8 @@
 .inputContainer {
     display: flex;
     flex-direction: column;
+    gap: 2vh;
+    margin-top:4vh;
 }
 
 .inputContainer > * {
@@ -29,6 +31,7 @@
     font-size: 0.7vw;
     font-weight:100;
     justify-content: space-between;
+    
 }
 
 .exit img {
@@ -46,13 +49,18 @@
 }
 
 p {
-    font-size: 1.1vw;
+    font-size: 1vw;
     font-weight: 150;
+    margin-left: 1vw;
 }
 
-.inputContainer  p {
-    font-size: 1.2;
-    font-weight: normal;
+h1 {
+    margin-left: 1vw;
+}
+
+.row p {
+    font-weight:400;
+    font-size: 0.9vw;
 }
 
 .row {
@@ -68,6 +76,7 @@ input {
     margin-left: 5%;
     margin-right: 5%;
     padding-left: 0.5vw;
+    font-size: 0.9vw;
 }
 
 .file {
@@ -80,9 +89,8 @@ input {
     background-color: black;
     color: white;
     width: 7vw;
+    margin-left: auto;
+    margin-top: 3vh;
+    height: 5vh;
    
-}
-
-.row p {
-    font-size: 1vw;
 }

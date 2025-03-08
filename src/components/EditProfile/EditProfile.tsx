@@ -4,6 +4,7 @@ import { ProfileType } from '../../types/index';
 import { updateProfile } from '../../api/profiles'; // Function to update profile data
 import supabase from '../../helper/supabaseClient'; // Supabase client
 import imageCompression from 'browser-image-compression'; // For compressing images
+import {v4 as uuidv4} from 'uuid';
 
 type EditProfileType = {
   profile: ProfileType;
@@ -26,7 +27,7 @@ function EditProfile({ profile, toggleDialog }: EditProfileType) {
 
       // Generate unique file name
       const fileExt = file.name.split('.').pop();
-      const fileName = `${profile.id}_${Date.now()}.${fileExt}`;
+      const fileName = `${uuidv4()}.${fileExt}`;
 
       // Upload to Supabase Storage
       const { data, error } = await supabase.storage
@@ -62,7 +63,7 @@ function EditProfile({ profile, toggleDialog }: EditProfileType) {
       }
     }
 
-    const { error } = await updateProfile({ bio, instagram, profile_pic: updatedPhotoUrl });
+    const { error } = await updateProfile({ bio, instagram, photo: updatedPhotoUrl});
 
     if (error) {
       setError(error.message);
@@ -113,6 +114,7 @@ function EditProfile({ profile, toggleDialog }: EditProfileType) {
         <button className={styles.save} onClick={handleSave} disabled={loading}>
           {loading ? 'Saving...' : 'Save Changes'}
         </button>
+        
       </div>
     </div>
   );

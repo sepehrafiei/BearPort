@@ -38,7 +38,7 @@ export const createProfile = async (profileData: any) => {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('User not authenticated');
 
-  const newProfile = { ...profileData, id: user.id, email: user.email, profile_pic: "https://fmxpqnwqghkblfdhuqte.supabase.co/storage/v1/object/public/profile-pics//default.png"};
+  const newProfile = { ...profileData, id: user.id, email: user.email, photo: "https://fmxpqnwqghkblfdhuqte.supabase.co/storage/v1/object/public/profile-pics//default.png"};
   const { data, error } = await supabase
     .from('profiles')
     .insert(newProfile)
