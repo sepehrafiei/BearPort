@@ -1,9 +1,3 @@
-export interface SocialMedia {
-  twitter?: string;
-  facebook?: string;
-  instagram?: string;
-}
-
 export interface ProfileType {
   id?: string;
   full_name: string;
@@ -13,4 +7,14 @@ export interface ProfileType {
   photo: string ;
   rating?: number | null;
   instagram?: string | null;
+}
+
+export interface RoomType {
+  id: string;
+  host_id: string;
+  origin: string;
+  destination: string;
+  departure_time: string;
+  capacity: number;
+  created_at: string;
 }

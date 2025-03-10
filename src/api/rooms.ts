@@ -7,8 +7,11 @@ export const getRooms = async () => {
     .from('rooms')
     .select('*')
     .order('departure_time', { ascending: true });
-  return { data, error };
+
+  if (error) throw new Error(error.message); // Throw error so react-query handles it properly
+  return data; // Return only data, not { data, error }
 };
+
 
 // Create a new room. The host_id is automatically set to the authenticated user.
 export const createRoom = async (roomData: any) => {
