@@ -2,22 +2,22 @@
     display: flex;
     flex-direction:row;
     width: 100vw;
- 
+    height: 10vh;
     justify-content: flex-end;
 }
 
 button {
     background-color: transparent;
     color: black;
-    width: 5vw;
-    height: 2.5vw;
+    width: 7vw;
+    height: 8vh;
     margin-right: 2.5vw;
     margin-top:0.5vw;
     margin-bottom: 0.5vw;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 0.8vw;
+    font-size: 1vw;
     font-weight: 400;
     font-family: "Inter", serif;
     font-weight: 500;
