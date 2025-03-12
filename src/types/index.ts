@@ -11,10 +11,12 @@ export interface ProfileType {
 
 export interface RoomType {
   id: string;
-  host_id: string;
   origin: string;
   destination: string;
   departure_time: string;
   capacity: number;
-  created_at: string;
+  departure_date: string;
+  profiles: {
+    full_name: string;
+}[];
 }

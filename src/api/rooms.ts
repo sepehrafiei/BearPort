@@ -1,12 +1,22 @@
 // src/api/rooms.ts
 import supabase from '../helper/supabaseClient';
+import {v4 as uuidv4} from 'uuid';
 
 // Retrieve a list of all rooms, ordered by departure time.
 export const getRooms = async () => {
   const { data, error } = await supabase
-    .from('rooms')
-    .select('*')
-    .order('departure_time', { ascending: true });
+  .from('rooms')
+        .select(`
+            id, 
+            origin, 
+            destination, 
+            departure_time, 
+            capacity, 
+            departure_date, 
+            profiles(full_name)
+        `)
+        .eq('profiles.id', 'rooms.host_id')
+        .order('departure_time', { ascending: true });
 
   if (error) throw new Error(error.message); // Throw error so react-query handles it properly
   return data; // Return only data, not { data, error }
@@ -20,7 +30,7 @@ export const createRoom = async (roomData: any) => {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('User not authenticated');
 
-  const newRoom = { ...roomData, host_id: user.id };
+  const newRoom = { ...roomData, host_id: user.id, id: uuidv4() };
   const { data, error } = await supabase
     .from('rooms')
     .insert(newRoom)
