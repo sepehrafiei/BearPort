@@ -6,18 +6,24 @@
   }
 
   .authButton {
-    background: none;
-    border: 2px solid rgba(0, 0, 0, 0.3) !important;
+    background: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.125) !important;
     color: black;
     height: 3.5vw;
     font-size: 0.75vw !important;
     cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
+    transition: box-shadow 0.3s ease-in-out !important;
+  }
 
+  .authButton:active, .authButton:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.547) !important;
   }
   
   .container > h1 {
     font-family: "Inter";
-    font-size: 1.5vw;
+    font-size: 1.6vw;
+    width: 21vw;
     margin: 0;
   }
 

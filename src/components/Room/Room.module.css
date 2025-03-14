@@ -16,7 +16,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
     margin: 0;
     margin-top: 20%;
-    transition: 0.3s;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 .container > button:hover{
