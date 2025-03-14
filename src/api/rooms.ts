@@ -1,26 +1,18 @@
 // src/api/rooms.ts
 import supabase from '../helper/supabaseClient';
 import {v4 as uuidv4} from 'uuid';
+import { RoomType } from '../types';
 
 // Retrieve a list of all rooms, ordered by departure time.
-export const getRooms = async () => {
-  const { data, error } = await supabase
-  .from('rooms')
-        .select(`
-            id, 
-            origin, 
-            destination, 
-            departure_time, 
-            capacity, 
-            departure_date, 
-            profiles(full_name)
-        `)
-        .eq('profiles.id', 'rooms.host_id')
-        .order('departure_time', { ascending: true });
+export const getRooms = async (): Promise<RoomType[]> => {
+  const { data, error } = await supabase.rpc('get_rooms_with_hosts');
 
-  if (error) throw new Error(error.message); // Throw error so react-query handles it properly
-  return data; // Return only data, not { data, error }
+  if (error) throw new Error(error.message);
+
+  return data as RoomType[];
 };
+
+
 
 
 // Create a new room. The host_id is automatically set to the authenticated user.
@@ -29,12 +21,13 @@ export const createRoom = async (roomData: any) => {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('User not authenticated');
-
-  const newRoom = { ...roomData, host_id: user.id, id: uuidv4() };
+  const roomId = uuidv4();
+  const newRoom = { ...roomData, host_id: user.id, id: roomId };
   const { data, error } = await supabase
     .from('rooms')
     .insert(newRoom)
     .single();
+  let er = await joinRoom(roomId);
   return { data, error };
 };
 

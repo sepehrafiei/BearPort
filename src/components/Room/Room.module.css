@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 20vw;
+    height: 20vw;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
+    border-radius: 2vw;
+    margin: 2vw;
+    align-items: center;
+}
+
+.container > button {
+    color: white;
+    width: 80%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
+    margin: 0;
+    margin-top: 20%;
+    transition: 0.3s;
+}
+
+.container > button:hover{
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.608);
+}
+
+.joined {
+    background-color: rgb(19, 18, 18);
+}
+
+.joined:hover {
+    cursor:default;
+}
+
+.notJoined {
+    background-color:#004AAE;
+}

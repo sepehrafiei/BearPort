@@ -14,9 +14,9 @@ export interface RoomType {
   origin: string;
   destination: string;
   departure_time: string;
+  count_members: number;
   capacity: number;
   departure_date: string;
-  profiles: {
-    full_name: string;
-}[];
+  host_name: string;
+  joined: boolean;
 }
