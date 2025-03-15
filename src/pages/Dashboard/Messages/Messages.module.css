@@ -3,3 +3,7 @@
     flex-direction: row;
     width: 100vw;
 }
+
+.selected {
+    background-color: #dcd9d9;
+}

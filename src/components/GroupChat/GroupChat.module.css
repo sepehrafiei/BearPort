@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 1vw;
+}
+
+.container:hover {
+    cursor: pointer;
+}
+
+
+.pfp {
+    width: 15%;
+  height: 15%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.selected {
+    background-color: #dcd9d9;
+}

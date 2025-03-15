@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import styles from './AddRoom.module.css';
+import { createRoom } from '../../api/rooms'; 
+import { useQueryClient } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
 import { RoomType } from '../../types/index';
-import { createRoom } from '../../api/rooms'; // Function to update profile data
-import {v4 as uuidv4} from 'uuid';
 
-
-
-function AddRoom({toggleDialog} : {toggleDialog: () => void}) {
+function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [when, setWhen] = useState('');
@@ -15,21 +14,51 @@ function AddRoom({toggleDialog} : {toggleDialog: () => void}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSave = async () => {
-      setLoading(true);
-      setError(null);
+  const queryClient = useQueryClient(); // React Query client
 
-      const { error } = await createRoom({ origin: from, destination: to, departure_time: time, departure_date: when, capacity});
-  
-      if (error) {
-        setError(error.message);
-      } else {
-        toggleDialog();
-        window.location.reload();
-      }
-  
-      setLoading(false);
+  const handleSave = async () => {
+    setLoading(true);
+    setError(null);
+
+    const newRoom: Partial<RoomType> = {
+      id: uuidv4(), // Temporary ID until backend returns a real one
+      origin: from,
+      destination: to,
+      departure_time: time,
+      departure_date: when,
+      capacity,
+      joined: true, // Since the creator is automatically a member
+      count_members: 1, // Creator is the first member
     };
+
+    // Optimistically update the UI with a temporary room
+    queryClient.setQueryData(["rooms"], (oldData: any) => {
+      if (!oldData) return { pages: [[newRoom]], pageParams: [] };
+
+      return {
+        ...oldData,
+        pages: [[newRoom, ...oldData.pages[0]], ...oldData.pages.slice(1)], // Add new room to first page
+      };
+    });
+
+    const { error } = await createRoom({
+      origin: from,
+      destination: to,
+      departure_time: time,
+      departure_date: when,
+      capacity,
+    });
+
+    if (error) {
+      setError(error.message);
+      
+    } else {
+      toggleDialog();
+       // Ensure the fetched rooms have the correct data
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -39,16 +68,16 @@ function AddRoom({toggleDialog} : {toggleDialog: () => void}) {
           <img src="https://img.icons8.com/?size=100&id=82771&format=png&color=000000" alt="Close" />
         </button>
       </div>
-      <p>Make changes to your profile. Click save when you're done.</p>
+      <p>Add a new room. Click save when you're done.</p>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.inputContainer}>
         <div className={styles.row}>
           <p>From</p>
-          <input type="text"  value={from} onChange={(e) => setFrom(e.target.value)}/>
+          <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} />
         </div>
         <div className={styles.row}>
           <p>To</p>
-          <input type="text"  value={to} onChange={(e) => setTo(e.target.value)}/>
+          <input type="text" value={to} onChange={(e) => setTo(e.target.value)} />
         </div>
         <div className={styles.row}>
           <p>Date</p>
@@ -65,7 +94,6 @@ function AddRoom({toggleDialog} : {toggleDialog: () => void}) {
         <button className={styles.save} onClick={handleSave} disabled={loading}>
           {loading ? 'Adding...' : 'Add Room'}
         </button>
-        
       </div>
     </div>
   );
