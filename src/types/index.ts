@@ -21,3 +21,11 @@ export interface RoomType {
   host_photo?: string | null;
   joined?: boolean | null;
 }
+
+export interface Message {
+  id: string;
+  room_id: string;
+  sender_name: string;
+  content: string;
+  created_at: string;
+}

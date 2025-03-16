@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MessagePage.module.css";
 import supabase from "../../helper/supabaseClient";
-import { sendMessage } from "../../api/messages";
+import { sendMessage, getMessagesByRoom } from "../../api/messages";
 
 interface Props {
   roomId: string | null;
@@ -10,7 +10,7 @@ interface Props {
 interface Message {
   id: string;
   room_id: string;
-  user_id: string;
+  sender_name: string;
   content: string;
   created_at: string;
 }
@@ -24,15 +24,14 @@ function MessagePage({ roomId }: Props) {
     if (!roomId) return;
 
     const fetchMessages = async () => {
-      const { data, error } = await supabase
-        .from("messages")
-        .select("*")
-        .eq("room_id", roomId)
-        .order("created_at", { ascending: true });
+      const { data, error } = await getMessagesByRoom(roomId); // ✅ Using SQL function
 
-      if (error) console.error("Error fetching messages:", error);
-      else setMessages(data);
-      console.log(data);
+      if (error) {
+        console.error("Error fetching messages:", error);
+      } else {
+        setMessages(data);
+        console.log(data);
+      }
     };
 
     fetchMessages();
@@ -43,8 +42,13 @@ function MessagePage({ roomId }: Props) {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages", filter: `room_id=eq.${roomId}` },
-        (payload) => {
-          setMessages((prevMessages) => [...prevMessages, payload.new as Message]);
+        async (payload) => {
+          // Fetch the updated messages after an insert event
+          const { data: newMessages, error } = await getMessagesByRoom(roomId);
+
+          if (!error) {
+            setMessages(newMessages);
+          }
         }
       )
       .subscribe();
@@ -53,6 +57,7 @@ function MessagePage({ roomId }: Props) {
       supabase.removeChannel(channel); // Cleanup on unmount
     };
   }, [roomId]);
+
 
   const handleSendMessage = async () => {
     if (message.trim() === "") return;
@@ -66,7 +71,7 @@ function MessagePage({ roomId }: Props) {
       <div className={styles.messages}>
         {messages.map((msg) => (
           <div key={msg.id} className={styles.message}>
-            <strong>{msg.user_id}:</strong> {msg.content}
+            <strong>{msg.sender_name}:</strong> {msg.content}
           </div>
         ))}
       </div>
