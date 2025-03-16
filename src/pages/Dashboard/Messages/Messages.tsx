@@ -34,7 +34,7 @@ function Messages() {
           
         ))}
         </div>
-        <MessagePage id={selectedRoom}/>
+        <MessagePage roomId={selectedRoom}/>
     </div>
   );
 }
