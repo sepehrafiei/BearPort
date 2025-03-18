@@ -19,7 +19,7 @@ function Rooms() {
     });
   }
 
-  const pageSize = 2; // Customize as needed
+  const pageSize = 8; // Customize as needed
   const { data, error, status, fetchNextPage, hasNextPage } = usePaginatedRooms(pageSize);
 
   const queryClient = useQueryClient(); // React Query Client

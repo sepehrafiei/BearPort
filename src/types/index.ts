@@ -20,6 +20,7 @@ export interface RoomType {
   host_name?: string | null;
   host_photo?: string | null;
   joined?: boolean | null;
+  member_id?: string | null;
 }
 
 export interface Message {
@@ -28,4 +29,5 @@ export interface Message {
   sender_name: string;
   content: string;
   created_at: string;
+  member_id: string;
 }

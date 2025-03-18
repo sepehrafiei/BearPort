@@ -8,12 +8,14 @@ import MessagePage from "../../../components/MessagePage/MessagePage";
 
 function Messages() {
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [member_id, setMember_id] = useState<string | null>(null);
 
   // Fetch and cache the user's rooms
   const { data: rooms, error, isLoading } = useQuery({
     queryKey: ["userRooms"],
     queryFn: getUserRooms,
   });
+
 
   if (isLoading) return <p className={styles.loading}>Loading chats...</p>;
   if (error) return <p className={styles.error}>Error: {error.message}</p>;
@@ -26,7 +28,11 @@ function Messages() {
             
             <div 
             key={r.id} 
-            onClick={() => setSelectedRoom(r.id)} 
+            onClick={() => {
+              setSelectedRoom(r.id)
+              setMember_id(r.member_id || "")
+              console.log(r.member_id)
+            }} 
             className={r.id === selectedRoom ? styles.selected : ""}
           >
             <GroupChat room={r} />
@@ -34,7 +40,7 @@ function Messages() {
           
         ))}
         </div>
-        <MessagePage roomId={selectedRoom}/>
+        <MessagePage roomId={selectedRoom} member_id={member_id}/>
     </div>
   );
 }

@@ -27,7 +27,6 @@ export const getUserRooms = async (): Promise<RoomType[]> => {
   const { data, error } = await supabase.rpc("get_user_rooms");
 
   if (error) throw new Error(error.message);
-
   return data as RoomType[];
 };
 
