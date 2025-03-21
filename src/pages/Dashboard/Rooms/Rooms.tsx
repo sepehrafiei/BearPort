@@ -1,5 +1,5 @@
-import { RoomType } from '../../../types/index';
-import { fetchPaginatedRooms, joinRoom } from '../../../api/rooms';
+import { RideType } from '../../../types/index';
+import { fetchPaginatedRides, joinRide } from '../../../api/rooms';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import AddRoom from '../../../components/AddRoom/AddRoom';
 import { useRef } from 'react';
@@ -11,7 +11,7 @@ function Rooms() {
   function usePaginatedRooms(pageSize: number) {
     return useInfiniteQuery({
       queryKey: ["rooms"],
-      queryFn: ({ pageParam = 1 }) => fetchPaginatedRooms(pageParam, pageSize),
+      queryFn: ({ pageParam = 1 }) => fetchPaginatedRides(pageParam, pageSize),
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => 
         lastPage.length == pageSize ? allPages.length + 1 : undefined, // Load next page if results exist
@@ -25,7 +25,7 @@ function Rooms() {
   const queryClient = useQueryClient(); // React Query Client
 
   async function handleJoinRoom(roomId: string) {
-    const { error } = await joinRoom(roomId);
+    await joinRide(roomId);
     if (error) {
       console.error("Failed to join room:", error);
       return;
@@ -37,8 +37,8 @@ function Rooms() {
   
       return {
         ...oldData,
-        pages: oldData.pages.map((page: RoomType[]) =>
-          page.map((room: RoomType) =>
+        pages: oldData.pages.map((page: RideType[]) =>
+          page.map((room: RideType) =>
             room.id === roomId
               ? { 
                   ...room, 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUserRooms } from "../../../api/rooms";
+import { getUserRides } from "../../../api/rooms";
 import { RoomType } from "../../../types/index";
 import styles from "./Messages.module.css";
 import GroupChat from "../../../components/GroupChat/GroupChat";
@@ -13,7 +13,7 @@ function Messages() {
   // Fetch and cache the user's rooms
   const { data: rooms, error, isLoading } = useQuery({
     queryKey: ["userRooms"],
-    queryFn: getUserRooms,
+    queryFn: getUserRides,
   });
 
 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import styles from './AddRoom.module.css';
-import { createRoom } from '../../api/rooms'; 
+import { addRide } from '../../api/rooms'; 
 import { useQueryClient } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
-import { RoomType } from '../../types/index';
+import { RideType } from '../../types/index';
 
 function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
   const [from, setFrom] = useState('');
@@ -16,17 +16,23 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
 
   const queryClient = useQueryClient(); // React Query client
 
+  function convertToUTC(date: string, time: string, timezone: string): string {
+    const localDateTime = new Date(`${date}T${time}:00`);
+    return new Date(localDateTime.toLocaleString("en-US", { timeZone: timezone })).toISOString();
+  }
+
   const handleSave = async () => {
-    
     setLoading(true);
     setError(null);
 
-    const newRoom: Partial<RoomType> = {
+    const userTimeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;  // Get user's timezone
+    const utcTimestamp: string = convertToUTC(when, time, userTimeZone);
+
+    const newRoom: Partial<RideType> = {
       id: uuidv4(), // Temporary ID until backend returns a real one
       origin: from,
       destination: to,
-      departure_time: time,
-      departure_date: when,
+      departure_time: utcTimestamp,
       capacity,
       joined: true, // Since the creator is automatically a member
       count_members: 1, // Creator is the first member
@@ -42,11 +48,10 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
       };
     });
 
-    const { error } = await createRoom({
+    const { error } = await addRide({
       origin: from,
       destination: to,
-      departure_time: time,
-      departure_date: when,
+      departure_time: utcTimestamp,
       capacity,
     });
 

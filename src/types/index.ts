@@ -9,16 +9,15 @@ export interface ProfileType {
   instagram?: string | null;
 }
 
-export interface RoomType {
+export interface RideType {
   id: string;
+  host_name?: string | null;
+  host_photo?: string | null;
   origin: string;
   destination: string;
   departure_time: string;
-  count_members?: number | null;
   capacity: number;
-  departure_date: string;
-  host_name?: string | null;
-  host_photo?: string | null;
+  count_members?: number | null;
   joined?: boolean | null;
   member_id?: string | null;
 }
