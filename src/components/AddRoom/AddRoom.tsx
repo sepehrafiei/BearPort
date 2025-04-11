@@ -2,8 +2,7 @@ import { useState } from 'react';
 import styles from './AddRoom.module.css';
 import { addRide } from '../../api/rooms'; 
 import { useQueryClient } from '@tanstack/react-query';
-import { v4 as uuidv4 } from 'uuid';
-import { RideType } from '../../types/index';
+import { RideType } from '../../types';
 
 function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
   const [from, setFrom] = useState('');
@@ -14,53 +13,45 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const queryClient = useQueryClient(); // React Query client
+  const queryClient = useQueryClient();
 
   function convertToUTC(date: string, time: string, timezone: string): string {
-    const localDateTime = new Date(`${date}T${time}:00`);
+    const localDateTime = new Date(`${date}T${time}`);
     return new Date(localDateTime.toLocaleString("en-US", { timeZone: timezone })).toISOString();
   }
 
   const handleSave = async () => {
+    if (!from || !to || !when || !time || !capacity) {
+      setError("All fields are required");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
-    const userTimeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;  // Get user's timezone
-    const utcTimestamp: string = convertToUTC(when, time, userTimeZone);
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const utcTimestamp = convertToUTC(when, time, userTimeZone);
 
-    const newRoom: Partial<RideType> = {
-      id: uuidv4(), // Temporary ID until backend returns a real one
-      origin: from,
-      destination: to,
-      departure_time: utcTimestamp,
-      capacity,
-      joined: true, // Since the creator is automatically a member
-      count_members: 1, // Creator is the first member
-    };
+    try {
+      const { data: newRide } = await addRide({
+        origin: from,
+        destination: to,
+        departure_time: utcTimestamp,
+        capacity,
+      });
 
-    // Optimistically update the UI with a temporary room
-    queryClient.setQueryData(["rooms"], (oldData: any) => {
-      if (!oldData) return { pages: [[newRoom]], pageParams: [] };
+      queryClient.setQueryData(["rides"], (oldData: any) => {
+        if (!oldData) return { pages: [[newRide]], pageParams: [] };
+        return {
+          ...oldData,
+          pages: [[newRide, ...oldData.pages[0]], ...oldData.pages.slice(1)],
+        };
+      });
 
-      return {
-        ...oldData,
-        pages: [[newRoom, ...oldData.pages[0]], ...oldData.pages.slice(1)], // Add new room to first page
-      };
-    });
-
-    const { error } = await addRide({
-      origin: from,
-      destination: to,
-      departure_time: utcTimestamp,
-      capacity,
-    });
-
-    if (error) {
-      setError(error.message);
-      
-    } else {
       toggleDialog();
-       // Ensure the fetched rooms have the correct data
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'An unexpected error occurred');
     }
 
     setLoading(false);
@@ -69,12 +60,12 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
   return (
     <div className={styles.container}>
       <div className={styles.head}>
-        <h1>Add Room</h1>
+        <h1>Add Ride</h1>
         <button onClick={toggleDialog} className={styles.exit}>
           <img src="https://img.icons8.com/?size=100&id=82771&format=png&color=000000" alt="Close" />
         </button>
       </div>
-      <p>Add a new room. Click save when you're done.</p>
+      <p>Add a new Ride. Click save when you're done.</p>
       {error && <p className={styles.error}>{error}</p>}
       <div className={styles.inputContainer}>
         <div className={styles.row}>
@@ -95,10 +86,10 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
         </div>
         <div className={styles.row}>
           <p>Capacity</p>
-          <input type="number" value={capacity} onChange={(e) => setCapacity(e.target.valueAsNumber)} />
+          <input type="number" min={1} value={capacity} onChange={(e) => setCapacity(e.target.valueAsNumber)} />
         </div>
         <button className={styles.save} onClick={handleSave} disabled={loading}>
-          {loading ? 'Adding...' : 'Add Room'}
+          {loading ? 'Adding...' : 'Add Ride'}
         </button>
       </div>
     </div>

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserRides } from "../../../api/rooms";
-import { RoomType } from "../../../types/index";
+import { RideType } from "../../../types/index";
 import styles from "./Messages.module.css";
 import GroupChat from "../../../components/GroupChat/GroupChat";
 import MessagePage from "../../../components/MessagePage/MessagePage";
 
 function Messages() {
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [selectedRide, setSelectedRide] = useState<string | null>(null);
   const [member_id, setMember_id] = useState<string | null>(null);
 
   // Fetch and cache the user's rooms
-  const { data: rooms, error, isLoading } = useQuery({
-    queryKey: ["userRooms"],
+  const { data: rides, error, isLoading } = useQuery({
+    queryKey: ["userRides"],
     queryFn: getUserRides,
   });
 
@@ -24,23 +24,23 @@ function Messages() {
     <div className={styles.container}>
 
         <div className={styles.chatList}>
-          {rooms?.map((r) => (
+          {rides?.map((r) => (
             
             <div 
             key={r.id} 
             onClick={() => {
-              setSelectedRoom(r.id)
+              setSelectedRide(r.id)
               setMember_id(r.member_id || "")
               console.log(r.member_id)
             }} 
-            className={r.id === selectedRoom ? styles.selected : ""}
+            className={r.id === selectedRide ? styles.selected : ""}
           >
-            <GroupChat room={r} />
+            <GroupChat ride={r} />
           </div>
           
         ))}
         </div>
-        <MessagePage roomId={selectedRoom} member_id={member_id}/>
+        <MessagePage rideId={selectedRide} member_id={member_id}/>
     </div>
   );
 }

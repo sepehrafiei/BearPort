@@ -2,39 +2,39 @@ import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./MessagePage.module.css";
 import supabase from "../../helper/supabaseClient";
-import { sendMessage, getMessagesByRoom } from "../../api/messages";
+import { sendMessage, getMessagesByRide } from "../../api/messages";
 import { Message } from "../../types/index";
 
 interface Props {
-  roomId: string | null;
+  rideId: string | null;
   member_id: string | null;
 }
 
-function MessagePage({ roomId, member_id }: Props) {
+function MessagePage({ rideId, member_id }: Props) {
   const [message, setMessage] = useState("");
   const queryClient = useQueryClient();
 
   // Fetch and cache messages
   const { data: messages = [], isLoading } = useQuery({
-    queryKey: ["messages", roomId],
+    queryKey: ["messages", rideId],
     queryFn: async () => {
-      if (!roomId) return [];
-      const { data, error } = await getMessagesByRoom(roomId);
+      if (!rideId) return [];
+      const { data, error } = await getMessagesByRide(rideId);
       if (error) {
         console.error("Error fetching messages:", error);
         return [];
       }
       return data;
     },
-    enabled: !!roomId, // Only run if roomId is present
+    enabled: !!rideId, // Only run if roomId is present
     staleTime: Infinity, // Cache messages indefinitely
   });
 
   // Mutation for sending a message
   const sendMessageMutation = useMutation({
     mutationFn: async (newMessage: string) => {
-      if (!roomId) return;
-      return sendMessage(roomId, newMessage);
+      if (!rideId) return;
+      return sendMessage(rideId, newMessage);
     },
     onSuccess: () => {
       setMessage(""); // Clear input after sending
@@ -42,18 +42,18 @@ function MessagePage({ roomId, member_id }: Props) {
   });
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!rideId) return;
 
     const channel = supabase
-      .channel(`room-${roomId}`)
+      .channel(`room-${rideId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages", filter: `room_id=eq.${roomId}` },
+        { event: "INSERT", schema: "public", table: "messages", filter: `ride_id=eq.${rideId}` },
         (payload) => {
           const newMessage = payload.new as Message;
 
           // Update cache only if the message is new
-          queryClient.setQueryData(["messages", roomId], (oldMessages: Message[] = []) => {
+          queryClient.setQueryData(["messages", rideId], (oldMessages: Message[] = []) => {
             if (!oldMessages.some((msg) => msg.id === newMessage.id)) {
               return [...oldMessages, newMessage];
             }
@@ -66,7 +66,7 @@ function MessagePage({ roomId, member_id }: Props) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [roomId, queryClient]);
+  }, [rideId, queryClient]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -81,7 +81,7 @@ function MessagePage({ roomId, member_id }: Props) {
     }
   };
 
-  return roomId ? (
+  return rideId ? (
     <div className={styles.container}>
       <div className={styles.messages}>
         {isLoading ? (

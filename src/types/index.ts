@@ -22,6 +22,8 @@ export interface RideType {
   member_id?: string | null;
 }
 
+
+
 export interface Message {
   id: string;
   room_id: string;
