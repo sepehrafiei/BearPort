@@ -28,7 +28,7 @@ export default function RideSearch({ onSearch }: RideSearchProps) {
   return (
     <div className={styles.container}>
       <div className={styles.fieldGroup}>
-        <label className={styles.label}>Origin</label>
+        <label className={styles.label}>Origin: </label>
         <input
           type="text"
           className={styles.input}
@@ -38,7 +38,7 @@ export default function RideSearch({ onSearch }: RideSearchProps) {
         />
       </div>
       <div className={styles.fieldGroup}>
-        <label className={styles.label}>Destination</label>
+        <label className={styles.label}>Destination: </label>
         <input
           type="text"
           className={styles.input}
@@ -48,7 +48,7 @@ export default function RideSearch({ onSearch }: RideSearchProps) {
         />
       </div>
       <div className={styles.fieldGroup}>
-        <label className={styles.label}>Start Date</label>
+        <label className={styles.label}>Start Date: </label>
         <input
           type="date"
           className={styles.input}
@@ -57,7 +57,7 @@ export default function RideSearch({ onSearch }: RideSearchProps) {
         />
       </div>
       <div className={styles.fieldGroup}>
-        <label className={styles.label}>End Date</label>
+        <label className={styles.label}>End Date: </label>
         <input
           type="date"
           className={styles.input}

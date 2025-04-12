@@ -1,29 +1,45 @@
+import { useState, useRef } from 'react';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { RideType } from '../../../types/index';
 import { fetchPaginatedRides, joinRide } from '../../../api/rooms';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import AddRoom from '../../../components/AddRoom/AddRoom';
-import { useRef } from 'react';
 import Room from '../../../components/Room/Room';
-import styles from './Rooms.module.css'
-import Search from '../../../components/RideSearch/RideSearch'
+import styles from './Rooms.module.css';
+import RideSearch from '../../../components/RideSearch/RideSearch';
 
 function Rooms() {
-  
-  function usePaginatedRides(pageSize: number) {
-    return useInfiniteQuery({
-      queryKey: ["rides"],
-      queryFn: ({ pageParam = 1 }) => fetchPaginatedRides(pageParam, pageSize),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => 
-        lastPage.length == pageSize ? allPages.length + 1 : undefined, // Load next page if results exist
-      staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    });
-  }
+  const [searchFilters, setSearchFilters] = useState<{
+    origin: string | null;
+    destination: string | null;
+    startDate: string | null;
+    endDate: string | null;
+  }>({
+    origin: null,
+    destination: null,
+    startDate: null,
+    endDate: null,
+  });
 
-  const pageSize = 8; // Customize as needed
-  const { data, error, status, fetchNextPage, hasNextPage } = usePaginatedRides(pageSize);
+  const pageSize = 8;
 
-  const queryClient = useQueryClient(); // React Query Client
+  const {
+    data,
+    error,
+    status,
+    fetchNextPage,
+    hasNextPage,
+    refetch
+  } = useInfiniteQuery({
+    queryKey: ['rides', searchFilters],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchPaginatedRides(pageParam, pageSize, searchFilters),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length == pageSize ? allPages.length + 1 : undefined,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const queryClient = useQueryClient();
 
   async function handleJoinRide(rideId: string) {
     await joinRide(rideId);
@@ -31,20 +47,19 @@ function Rooms() {
       console.error("Failed to join ride:", error);
       return;
     }
-  
-    // Update the specific ride in the cache instead of refreshing the page
-    queryClient.setQueryData(["rides"], (oldData: any) => {
+
+    queryClient.setQueryData(["rides", searchFilters], (oldData: any) => {
       if (!oldData) return oldData;
-  
+
       return {
         ...oldData,
         pages: oldData.pages.map((page: RideType[]) =>
           page.map((ride: RideType) =>
             ride.id === rideId
-              ? { 
-                  ...ride, 
-                  joined: true, 
-                  count_members: (ride.count_members || 0) + 1 // Increase count_members by 1
+              ? {
+                  ...ride,
+                  joined: true,
+                  count_members: (ride.count_members || 0) + 1,
                 }
               : ride
           )
@@ -52,42 +67,42 @@ function Rooms() {
       };
     });
   }
-  
 
   const dialogRef = useRef<HTMLDialogElement>(null);
-  
+
   function toggleDialog() {
     if (!dialogRef.current) return;
-    dialogRef.current.hasAttribute("open") 
+    dialogRef.current.hasAttribute("open")
       ? dialogRef.current.close()
       : dialogRef.current.showModal();
   }
 
-  if (status === 'pending') return <p>Loading...</p>;
-  if (status === 'error')
-    return <p>Error: {error instanceof Error ? error.message : 'An error occurred'}</p>;
+  const handleSearch = (filters: typeof searchFilters) => {
+    setSearchFilters(filters);
+    queryClient.removeQueries({ queryKey: ['rides'] }); // Clear old pages
+    refetch(); // Refetch with new filters
+  };
 
-  // Flatten paginated data into a single array
   const rides = data?.pages.flat() || [];
 
   return (
-    <div>
+    <div className={styles.page}>
+
+      <RideSearch onSearch={handleSearch} /> {/* Hooked up here */}
       <h2>Available Rides</h2>
-      {/* where ridesearch should go */}
       <div className={styles.container}>
-        {rides.length ? 
+        {rides.length ? (
           rides.map((ride) => (
             <Room key={ride.id} room={ride} handleJoinRoom={handleJoinRide} />
           ))
-        : (
+        ) : (
           <p>No rides available.</p>
         )}
-        
-        {/* Load More Button */}
+
         {hasNextPage && (
           <button onClick={() => fetchNextPage()}>Load More</button>
         )}
-        
+
         <button onClick={toggleDialog}>Add Ride</button>
       </div>
 

@@ -2,19 +2,51 @@
 import supabase, { requireUser } from '../helper/supabaseClient';
 import { RideType } from '../types';
 
-export async function fetchPaginatedRides(page: number, pageSize: number): Promise<RideType[]> {
+// export async function fetchPaginatedRides(page: number, pageSize: number): Promise<RideType[]> {
+//   await requireUser();
+//   const safePage = Math.max(page, 1);
+//   const { data, error } = await supabase.rpc("get_available_rides", {
+//     page_offset: (safePage - 1) * pageSize,
+//     page_limit: pageSize,
+//   });
+//   if (error) {
+//     console.error("Error fetching rides:", error);
+//     throw error;
+//   }
+//   return data as RideType[];
+// }
+
+
+export async function fetchPaginatedRides(
+  page: number,
+  pageSize: number,
+  filters: {
+    origin: string | null;
+    destination: string | null;
+    startDate: string | null;
+    endDate: string | null;
+  }
+): Promise<RideType[]> {
   await requireUser();
   const safePage = Math.max(page, 1);
-  const { data, error } = await supabase.rpc("get_available_rides", {
-    page_offset: (safePage - 1) * pageSize,
+
+  const { data, error } = await supabase.rpc('get_available_rides_with_filters', {
+    origin_param: filters.origin,
+    destination_param: filters.destination,
+    start_date_param: filters.startDate,
+    end_date_param: filters.endDate,
     page_limit: pageSize,
+    page_offset: (safePage - 1) * pageSize,
   });
+
   if (error) {
-    console.error("Error fetching rides:", error);
+    console.error("Error fetching filtered rides:", error);
     throw error;
   }
+
   return data as RideType[];
 }
+
 
 export const getUserRides = async (): Promise<RideType[]> => {
   await requireUser();
