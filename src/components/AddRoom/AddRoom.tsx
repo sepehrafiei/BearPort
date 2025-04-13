@@ -4,7 +4,16 @@ import { addRide } from '../../api/rooms';
 import { useQueryClient } from '@tanstack/react-query';
 import { RideType } from '../../types';
 
-function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
+function AddRoom({ toggleDialog, searchFilters }: {
+  toggleDialog: () => void;
+  searchFilters: {
+    origin: string | null;
+    destination: string | null;
+    startDate: string | null;
+    endDate: string | null;
+  };
+})
+ {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [when, setWhen] = useState('');
@@ -40,13 +49,14 @@ function AddRoom({ toggleDialog }: { toggleDialog: () => void }) {
         capacity,
       });
 
-      queryClient.setQueryData(["rides"], (oldData: any) => {
+      queryClient.setQueryData(['rides', searchFilters], (oldData: any) => {
         if (!oldData) return { pages: [[newRide]], pageParams: [] };
         return {
           ...oldData,
           pages: [[newRide, ...oldData.pages[0]], ...oldData.pages.slice(1)],
         };
       });
+      
 
       toggleDialog();
     } catch (err: any) {

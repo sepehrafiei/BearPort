@@ -8,9 +8,10 @@
   
 }
 
-.logo {
 
-  width: 20vw;
+.logo {
+  width: 17vw;
+  margin-bottom: 1vw;
 }
 
 .left {
@@ -23,12 +24,15 @@
 
 .logo_text {
   font-size: 4vw;
-  font-family: "Rampart One", serif;
-  font-weight: 400;
+  /* font-family: "Rampart One", serif; */
+  font-family: 'Inter';
+  font-weight: 600;
   font-style: normal;
   color: #FDB515;
   padding-left:1vw;
   margin:0;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+
   
 }
 

@@ -28,7 +28,7 @@ export default function Login() {
         return (
           <div className={styles.container}>
             <h1>FIND FELLOW BEARS TO GO TO THE AIRPORT WITH!</h1>
-            <p>Sign in with your Student Gmail: </p>
+            <p>Sign in with your student gmail: </p>
             <Auth 
         supabaseClient={supabase} 
         providers={['google']} 

@@ -2,8 +2,13 @@
     display: flex;
     flex-direction: row;
     width: 100vw;
+    height: 90dvh;
 }
 
 .selected {
     background-color: #dcd9d9;
+}
+
+.chatList {
+    overflow-y: auto;
 }

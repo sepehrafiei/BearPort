@@ -96,13 +96,14 @@ function MessagePage({ rideId, member_id }: Props) {
       </div>
       <div className={styles.inputContainer}>
         <input
+          className= {styles.input}
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
         />
-        <button onClick={handleSendMessage}>
+        <button className={styles.send_btn} onClick={handleSendMessage}>
           Send
         </button>
       </div>
