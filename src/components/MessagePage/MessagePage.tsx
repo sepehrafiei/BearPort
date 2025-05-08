@@ -89,7 +89,7 @@ function MessagePage({ rideId, member_id }: Props) {
         ) : (
           messages.map((msg : any) => (
             <div key={msg.id} className={styles.message}>
-              <strong>{msg.member_id === member_id ? "You" : msg.sender_name}:</strong> {msg.content}
+              <strong>{msg.member_id === member_id ? "" : msg.sender_name}:</strong> {msg.content}
             </div>
           ))
         )}
