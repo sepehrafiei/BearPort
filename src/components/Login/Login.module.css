@@ -7,17 +7,18 @@
 
   .authButton {
     background: none !important;
-    border: 1px solid rgba(0, 0, 0, 0.125) !important;
+    /* border: 1px solid rgba(0, 0, 0, 0.125) !important; */
+    border:none !important;
     color: black;
     height: 3.5vw;
     font-size: 0.75vw !important;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.125);
     transition: box-shadow 0.3s ease-in-out !important;
   }
 
   .authButton:active, .authButton:hover {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.547) !important;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
   }
   
   .container > h1 {

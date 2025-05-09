@@ -37,10 +37,15 @@ const Profile = () => {
           <p className={styles.email}>{profile.email}</p>
           {profile.bio? (<p>{profile.bio}</p>) : null}
           {profile.instagram && (
-            <a  href={profile.instagram} target="_blank">
-              <img className={styles.instagram} src={InstagramIcon}/>
-              </a>
-              )}
+            <a 
+              href={`https://www.instagram.com/${profile.instagram}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.instagram}
+            >
+              @{profile.instagram}
+            </a>
+          )}
           <button onClick={()=> {
             toggleDialog();
           }}>Edit</button>

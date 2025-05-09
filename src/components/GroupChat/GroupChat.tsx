@@ -1,21 +1,27 @@
-import React from 'react'
-import styles from './GroupChat.module.css'
-import { RideType } from '../../types'
+import React from "react";
+import { RideType } from "../../types";
+import styles from "./GroupChat.module.css";
 
-interface props{
-    ride: RideType
+interface GroupChatProps {
+  ride: RideType;
 }
 
-function GroupChat({ride} : props) {
+const GroupChat: React.FC<GroupChatProps> = ({ ride }) => {
   return (
     <div className={styles.container}>
-        <img src={ride.host_photo || ""}  className={styles.pfp} />
-            <div>
-              <p className={styles.chatName}>{ride.origin} → {ride.destination}</p>
-              <p className={styles.hostName}>Host: {ride.host_name}</p>
-            </div>
+      <div className={styles.rideInfo}>
+        <h3>{ride.origin} → {ride.destination}</h3>
+        <p className={styles.departureTime}>
+          {new Date(ride.departure_time).toLocaleString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default GroupChat
+export default GroupChat;

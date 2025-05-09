@@ -16,8 +16,8 @@ function Navbar() {
             <Link to="/dashboard">
                 <button className={location.pathname === "/dashboard" ? styles.active : ""}>Profile</button>
             </Link>
-            <Link to="/dashboard/rooms">
-                <button className={location.pathname === "/dashboard/rooms" ? styles.active : ""}>Rides</button>
+            <Link to="/dashboard/rides">
+                <button className={location.pathname === "/dashboard/rides" ? styles.active : ""}>Rides</button>
             </Link>
             <Link to="/dashboard/messages">
                 <button className={location.pathname === "/dashboard/messages" ? styles.active : ""}>Messages</button>

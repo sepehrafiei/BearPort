@@ -7,6 +7,7 @@ export interface ProfileType {
   photo: string ;
   rating?: number | null;
   instagram?: string | null;
+  username?: string;
 }
 
 export interface RideType {
@@ -26,7 +27,7 @@ export interface RideType {
 
 export interface Message {
   id: string;
-  room_id: string;
+  ride_id: string;
   sender_name: string;
   content: string;
   created_at: string;

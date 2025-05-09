@@ -15,17 +15,21 @@ button {
     margin-top:0.5vw;
     margin-bottom: 0.5vw;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 0.8vw;
     font-weight: 400;
     font-family: "Inter", serif;
     font-weight: 500;
+    transition: all 0.2s;
 }
 
 .active {
-    background: rgba(0,0,0,0.1);
+    background-color: white;
     font-weight: bold;
+    border-bottom: 2px solid #3b82f6;
+    border-radius: 0;
+    margin-bottom: -0.2vh;
 }
 
 .divider {
@@ -51,4 +55,32 @@ button {
         justify-content: center;
         margin-bottom: 2vw;
     }
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #6b7280;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.navItem:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.navItem.active {
+    color: #1f2937;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.navItem.active:hover {
+    background-color: white;
 }

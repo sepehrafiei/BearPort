@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { RideType } from '../../../types/index';
-import { fetchPaginatedRides, joinRide } from '../../../api/rooms';
-import AddRoom from '../../../components/AddRoom/AddRoom';
-import Room from '../../../components/Room/Room';
-import styles from './Rooms.module.css';
+import { fetchPaginatedRides, joinRide } from '../../../api/rides';
+import AddRide from '../../../components/AddRide/AddRide';
+import Ride from '../../../components/Ride/Ride';
+import styles from './Rides.module.css';
 import RideSearch from '../../../components/RideSearch/RideSearch';
 
-function Rooms() {
+function Rides() {
   const [searchFilters, setSearchFilters] = useState<{
     origin: string | null;
     destination: string | null;
@@ -32,8 +32,11 @@ function Rooms() {
     isFetchingNextPage
   } = useInfiniteQuery({
     queryKey: ['rides', searchFilters],
-    queryFn: ({ pageParam = 1 }) =>
-      fetchPaginatedRides(pageParam, pageSize, searchFilters),
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await fetchPaginatedRides(pageParam, pageSize, searchFilters);
+      if (response.error) throw response.error;
+      return response.data || [];
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length === pageSize ? allPages.length + 1 : undefined,
@@ -43,9 +46,9 @@ function Rooms() {
   const queryClient = useQueryClient();
 
   async function handleJoinRide(rideId: string) {
-    await joinRide(rideId);
-    if (error) {
-      console.error("Failed to join ride:", error);
+    const response = await joinRide(rideId);
+    if (response.error) {
+      console.error("Failed to join ride:", response.error);
       return;
     }
 
@@ -67,6 +70,8 @@ function Rooms() {
         ),
       };
     });
+
+    queryClient.invalidateQueries({ queryKey: ['messages', rideId] });
   }
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -112,30 +117,38 @@ function Rooms() {
   return (
     <div className={styles.page}>
       <RideSearch onSearch={handleSearch} />
-
-      <h2>Available Rides</h2>
+      
+      <div className={styles.header}>
+        <h2>Available Rides</h2>
+      </div>
 
       <div className={styles.container}>
         {rides.length ? (
           rides.map((ride) => (
-            <Room key={ride.id} room={ride} handleJoinRoom={handleJoinRide} />
+            <Ride key={ride.id} ride={ride} handleJoinRide={handleJoinRide} />
           ))
         ) : (
-          <p>No rides available.</p>
+          <div className={styles.noRides}>
+            <p>No rides available matching your search criteria.</p>
+          </div>
         )}
 
         {/* Sentinel div for infinite scroll */}
         {hasNextPage && <div ref={loadMoreRef} style={{ height: 1 }} />}
-        {isFetchingNextPage && <p>Loading more rides...</p>}
-
-        <button onClick={toggleDialog}>Add Ride</button>
+        {isFetchingNextPage && (
+          <div className={styles.loadingMore}>Loading more rides...</div>
+        )}
       </div>
 
+      <button className={styles.addButton} onClick={toggleDialog}>
+        +
+      </button>
+
       <dialog ref={dialogRef}>
-        <AddRoom toggleDialog={toggleDialog} searchFilters={searchFilters} />
+        <AddRide toggleDialog={toggleDialog} searchFilters={searchFilters} />
       </dialog>
     </div>
   );
 }
 
-export default Rooms;
+export default Rides;

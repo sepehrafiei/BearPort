@@ -53,9 +53,20 @@ dialog:focus {
 }
 
 .instagram {
-  width: 2vw;
-  height: 2vw;
-  margin-top:1vw;
+  display: inline-block;
+  color: #e1306c;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  background-color: #fdf2f8;
+  border-radius: 20px;
+  transition: background-color 0.2s;
+  margin-top: 1vw;
+  margin-bottom: 3vw;
+}
+
+.instagram:hover {
+  background-color: #fce7f3;
 }
 
 .email {

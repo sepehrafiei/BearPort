@@ -6,7 +6,7 @@
     /* background-color: rgb(245, 245, 245); */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.325);
     border-radius: 10px;
-    margin: 2vw;
+    margin: 1vw;
     align-items: center;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .notJoined {
-    background-color:#004AAE;
+    background-color:#3b82f6;
 }
 
 p {
