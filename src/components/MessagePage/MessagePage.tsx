@@ -8,6 +8,7 @@ import { leaveRide, deleteRide, isRideHost, getRide, getRideMembers, RideMember 
 import { RideType } from "../../types";
 import MembersPopup from "../MembersPopup/MembersPopup";
 import ProfilePopup from "../ProfilePopup/ProfilePopup";
+import ConfirmPopup from "../ConfirmPopup/ConfirmPopup";
 
 interface Props {
   rideId: string | null;
@@ -21,6 +22,8 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
   const [isHost, setIsHost] = useState(false);
   const [isMembersPopupOpen, setIsMembersPopupOpen] = useState(false);
   const [isProfilePopupOpen, setIsProfilePopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -143,6 +146,12 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
       return;
     }
     
+    setIsConfirmPopupOpen(true);
+  };
+
+  const handleConfirmLeave = async () => {
+    if (!rideId) return;
+    
     setIsLeaving(true);
     
     try {
@@ -169,15 +178,17 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
       alert("Failed to leave ride. Please try again.");
     } finally {
       setIsLeaving(false);
+      setIsConfirmPopupOpen(false);
     }
   };
 
   const handleDelete = async () => {
     if (!rideId) return;
-    
-    if (!window.confirm('Are you sure you want to delete this ride? This action cannot be undone.')) {
-      return;
-    }
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!rideId) return;
     
     try {
       const response = await deleteRide(rideId);
@@ -201,6 +212,8 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
     } catch (error) {
       console.error("Error in delete ride:", error);
       alert("Failed to delete ride. Please try again.");
+    } finally {
+      setIsDeletePopupOpen(false);
     }
   };
 
@@ -331,6 +344,28 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
             setSelectedMemberId(null);
           }}
           profile={selectedMember}
+        />
+      )}
+      {isConfirmPopupOpen && (
+        <ConfirmPopup
+          isOpen={isConfirmPopupOpen}
+          onClose={() => setIsConfirmPopupOpen(false)}
+          onConfirm={handleConfirmLeave}
+          title="Leave Group"
+          message="Are you sure you want to leave this group? You will no longer have access to the chat."
+          confirmText="Leave Group"
+          cancelText="Cancel"
+        />
+      )}
+      {isDeletePopupOpen && (
+        <ConfirmPopup
+          isOpen={isDeletePopupOpen}
+          onClose={() => setIsDeletePopupOpen(false)}
+          onConfirm={handleConfirmDelete}
+          title="Delete Ride"
+          message="Are you sure you want to delete this ride? This action cannot be undone and all members will be removed from the group."
+          confirmText="Delete Ride"
+          cancelText="Cancel"
         />
       )}
     </div>

@@ -70,6 +70,7 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    margin-right:0;
 }
 
 .clearButton {
