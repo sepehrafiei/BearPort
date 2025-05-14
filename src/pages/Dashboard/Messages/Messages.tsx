@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUserRides } from "../../../api/rides";
-import { RideType } from "../../../types/index";
 import styles from "./Messages.module.css";
 import GroupChat from "../../../components/GroupChat/GroupChat";
 import MessagePage from "../../../components/MessagePage/MessagePage";
@@ -46,7 +45,7 @@ function Messages() {
             }} 
             className={r.id === selectedRide ? styles.selected : ""}
           >
-            <GroupChat ride={r} onLeave={handleLeave} />
+            <GroupChat ride={r}  />
           </div>
         ))}
       </div>

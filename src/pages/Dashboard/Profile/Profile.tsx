@@ -4,7 +4,6 @@ import styles from './Profile.module.css'
 import { useRef } from 'react';
 import EditProfile from '../../../components/EditProfile/EditProfile'
 import {ProfileType} from '../../../types/index'
-import InstagramIcon from '../../../assets/instagram.png'
 
 const Profile = () => {
   const { status, error, data: profile } = useQuery<ProfileType>({

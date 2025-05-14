@@ -1,4 +1,3 @@
-import React from 'react'
 import venmo from '../../../assets/venmo.jpg'
 import styles from './Donation.module.css'
 

@@ -4,8 +4,7 @@ import styles from "./MessagePage.module.css";
 import supabase from "../../helper/supabaseClient";
 import { sendMessage, getMessagesByRide } from "../../api/messages";
 import { Message } from "../../types/index";
-import { leaveRide, deleteRide, isRideHost, getRide, getRideMembers, RideMember } from "../../api/rides";
-import { RideType } from "../../types";
+import { leaveRide, deleteRide, isRideHost, getRide, getRideMembers } from "../../api/rides";
 import MembersPopup from "../MembersPopup/MembersPopup";
 import ProfilePopup from "../ProfilePopup/ProfilePopup";
 import ConfirmPopup from "../ConfirmPopup/ConfirmPopup";
@@ -237,11 +236,7 @@ function MessagePage({ rideId, member_id, onLeave }: Props) {
     });
   };
 
-  const handleMemberClick = (memberId: string) => {
-    setSelectedMemberId(memberId);
-    setIsProfilePopupOpen(true);
-    setIsMembersPopupOpen(false);
-  };
+
 
   const selectedMember = members.find(m => m.id === selectedMemberId);
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './AddRide.module.css';
 import { addRide } from '../../api/rides';
-import { RideType } from '../../types';
+
 
 type AddRideType = {
     toggleDialog: () => void;

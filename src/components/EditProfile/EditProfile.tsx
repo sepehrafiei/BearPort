@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import styles from './EditProfile.module.css';
 import { ProfileType } from '../../types/index';
 import { updateProfile, updateUsername } from '../../api/profiles';
@@ -41,7 +40,7 @@ function EditProfile({ profile, toggleDialog }: EditProfileType) {
             const compressedFile = await imageCompression(file, options);
             const fileExt = file.name.split('.').pop();
             const fileName = `${uuidv4()}.${fileExt}`;
-            const { data, error } = await supabase.storage
+            const { error } = await supabase.storage
                 .from('profile-pics')
                 .upload(fileName, compressedFile, { upsert: true });
 

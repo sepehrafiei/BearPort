@@ -24,8 +24,6 @@ function Rides() {
 
   const {
     data,
-    error,
-    status,
     fetchNextPage,
     hasNextPage,
     refetch,
@@ -145,7 +143,7 @@ function Rides() {
       </button>
 
       <dialog ref={dialogRef}>
-        <AddRide toggleDialog={toggleDialog} searchFilters={searchFilters} />
+        <AddRide toggleDialog={toggleDialog}  />
       </dialog>
     </div>
   );
